@@ -40,4 +40,5 @@ public interface ATCConfig
   public int get_init_tick_ms();
   public int get_tick_dec();
   public String get_name();
+  public long get_Seed();
 };

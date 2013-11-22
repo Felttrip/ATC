@@ -34,12 +34,14 @@ public class ATCConfig_from_stream implements ATCConfig
   protected int next_line = 0;
   protected String name = "";
   protected Reader input_reader = null;
+  protected long seed = 0;
 
   public ATCConfig_from_stream( String n, Reader reader )
   {
     name = new String(n);
     input_reader = reader;
   }
+  public long get_Seed() {return seed;}
   public int get_dx() { return dx; }
   public int get_dy() { return dy; }
   public int get_new_plane_chance() { return new_plane_chance; }
@@ -91,6 +93,7 @@ public class ATCConfig_from_stream implements ATCConfig
             parse_airport( airfields, max_airfield );
           else if( "line:".equals( tokenizer.sval ) )
             parse_line( lines, max_line );
+          
 
           else 
             throw ( new ParseException(tokenizer.toString()) );
@@ -266,6 +269,7 @@ public class ATCConfig_from_stream implements ATCConfig
     else
       return (int)tokenizer.nval;
   }
+ 
   private int expect_token( int et ) throws ParseException, IOException
   {
     int t = tokenizer.nextToken();
@@ -274,5 +278,6 @@ public class ATCConfig_from_stream implements ATCConfig
     else
       return t;
   }
+
 
 };

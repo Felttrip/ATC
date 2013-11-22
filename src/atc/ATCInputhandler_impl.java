@@ -231,10 +231,26 @@ public class ATCInputhandler_impl extends Object implements ATCInputhandler
           }
           parse_state = 5;
           break;
-        case 9: //at beacon
-          if( c!='b' ) return false;
+        case 9: //at beacon && at exit
+          /*if( c!='b' ) return false;
           full_cmd_str += "beacon ";
           parse_state = 10;
+          break;*/
+        	/*
+        	 * added new switch to handle at exit
+        	 */
+        	switch(c)
+            {
+              case 'b':
+                full_cmd_str += "beacon ";
+                parse_state = 10;
+                break;
+              case 'e':
+                full_cmd_str += "exit ";
+                parse_state = 11;
+                break;
+              default: return false;
+            }
           break;
         case 10: //at beacon#
           int beacon_num;
@@ -255,6 +271,25 @@ public class ATCInputhandler_impl extends Object implements ATCInputhandler
           }
           parse_state = 99;
           break;
+        case 11: //at beacon#
+            int exit_num;
+            try { exit_num = Integer.parseInt( Character.toString(c) ); }
+            catch(Exception e) { return false; }
+            if( exit_num < 0 ) return false;
+            obj_at = atc_obj.getData().getExits()[exit_num];
+            if( obj_at == null ) return false;
+
+            full_cmd_str += "#" + c;
+            if( full_flag )
+            {
+              ((DIRCommand)cmd).pos = obj_at.pos;
+              ((DIRCommand)cmd).pos_obj = obj_at;
+              cmd.active_flag = false;
+              if( cmd instanceof TurnCommand && obj_to != null )
+                ((TurnCommand)cmd).dir = new Direction( obj_at.pos, obj_to.pos );
+            }
+            parse_state = 99;
+            break;
       } //end switch
     } //end while
 
@@ -278,6 +313,12 @@ public class ATCInputhandler_impl extends Object implements ATCInputhandler
     else if( "Exit".equals( command ) )
     {
       atc_obj.stopATC();
+    }
+    
+    /*Added pause functionality*/
+    else if( "Pause".equals( command ) )
+    {
+    	atc_obj.pauseATC();
     }
     return true;
   }

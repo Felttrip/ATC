@@ -478,4 +478,9 @@ public class ATCUI_impl_awt
   public void windowDeiconified(WindowEvent e){}
   public void windowActivated(WindowEvent e){}
   public void windowDeactivated(WindowEvent e){}
+@Override
+public String getSeed() {
+	// TODO Auto-generated method stub
+	return null;
+}
 };

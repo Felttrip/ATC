@@ -24,7 +24,7 @@ package atc;
 public class ATCRecord_impl implements ATCRecord
 {
   public void save( String user, String config_name, 
-                    int time, long real_time, int safe_count )
+                    int time, long real_time, int safe_count, long seed )
   {
     // tmp
     System.out.println(
@@ -32,6 +32,7 @@ public class ATCRecord_impl implements ATCRecord
         ", Game: " + config_name +
         ", Time: " + time +
         ", Real time: " + (double)real_time/1000 + "s" +
-        ", Safe: " + safe_count );
+        ", Safe: " + safe_count  +
+        ", Seed: "+ seed);
   }
 };

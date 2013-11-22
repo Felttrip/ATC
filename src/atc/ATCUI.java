@@ -62,5 +62,7 @@ public interface ATCUI
    * When ATCData or ATC tells UI to close itself.
    */
   public void close();
+
+ public String getSeed();
 };
 

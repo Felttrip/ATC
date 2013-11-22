@@ -98,4 +98,9 @@ public class ATCUI_dummy_impl extends Object implements ATCUI
   public void gameOver( String s ){}
   public void refresh(){}
   public void close(){}
+@Override
+public String getSeed() {
+	// TODO Auto-generated method stub
+	return null;
+}
 };

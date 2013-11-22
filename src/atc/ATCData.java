@@ -60,8 +60,12 @@ public class ATCData extends Object
 
   protected int tick_count = 0;
   protected int safe_plane_count = 0;
+  
+  //saving seed
+  protected long localSeed = System.currentTimeMillis();
+  protected long seed = 0;
   protected Random rand = new Random();
-
+  
   protected long start_time_ms = 0;
   protected long stop_time_ms = 0;
 
@@ -117,6 +121,7 @@ public class ATCData extends Object
     init_tick_ms = tick_ms = config.get_init_tick_ms();
     tick_dec = config.get_tick_dec();
     config_name = config.get_name();
+  
  
     // We use the user name from OS, for now.
     try{
@@ -165,7 +170,7 @@ public class ATCData extends Object
     public ATCTask( ATCData d ) { data = d; }
     public void run() { 
       try
-      { 
+      {
         data.tick(); 
       } 
       catch( ATCGameOverException e ) 
@@ -178,6 +183,12 @@ public class ATCData extends Object
 
   public synchronized void start()
   {
+	   seed = Long.parseLong(atc_obj.getSeed());
+	   if(seed<=0)
+		   this.seed = this.localSeed;
+	   rand.setSeed(seed);
+	   
+
     start_time_ms = System.currentTimeMillis();
 
     int i;
@@ -216,7 +227,7 @@ public class ATCData extends Object
     if( start_time_ms != 0 )
       if( record != null )
         record.save( user_name, config_name, tick_count, 
-            stop_time_ms - start_time_ms, safe_plane_count );
+            stop_time_ms - start_time_ms, safe_plane_count, seed );
     start_time_ms = stop_time_ms = 0;
     
     if( gameOverMessage != null )
@@ -298,8 +309,11 @@ public class ATCData extends Object
     } // end if
   }
 
+  //tick!!
   public void tick() throws ATCGameOverException
   {
+	  //check pause flag during tick
+	if(atc_obj.pauseFlag){return;}
     tick_count++;
 
     int plane_id;
@@ -338,7 +352,10 @@ public class ATCData extends Object
     atc_obj.getUI().InfoUpdate( tick_count, safe_plane_count );
     atc_obj.getUI().refresh();
   }
-    protected boolean isSafe( int id )
+    
+  //
+  //
+  protected boolean isSafe( int id )
     {
       if( ! planes[id].takeoff_flag )
         return false;

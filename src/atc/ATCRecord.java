@@ -24,5 +24,5 @@ package atc;
 public interface ATCRecord
 {
   public void save( String user, String config_name, 
-                    int time, long real_time, int safe_count );
+                    int time, long real_time, int safe_count, long seed );
 };

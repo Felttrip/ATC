@@ -40,6 +40,8 @@ public class ATC extends Applet
 
   protected String game = null; /* name of the game config */
   protected Reader input_reader = null;
+  protected boolean pauseFlag = false;
+  protected String seed = null;
 
   public ATC() { super(); }
   public ATC( String s ) { super(); game = new String(s); }
@@ -71,7 +73,7 @@ public class ATC extends Applet
    * Get game config then create Data-UI-Inputhandler and init Data.
    */
   public void startATC()
-  {
+  {  
     if( !applet_flag )
     {
       codeBase = ClassLoader.getSystemResource(".").toString();
@@ -122,7 +124,22 @@ public class ATC extends Applet
     if( !applet_flag )
       System.exit(0);
   }
-
+  
+  /*
+   * Pause function
+   */
+  public synchronized void pauseATC()
+  {
+	  //pause flag to check in tick
+	  if(pauseFlag)
+		  pauseFlag = false;
+	  else
+		  pauseFlag = true;
+  }
+  public synchronized String getSeed()
+  {
+	  return ui.getSeed();
+  }
   public ATCUI getUI()
   { return ui; }
   public ATCInputhandler getInputhandler()
