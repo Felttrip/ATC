@@ -231,23 +231,20 @@ public class ATCInputhandler_impl extends Object implements ATCInputhandler
           }
           parse_state = 5;
           break;
+         /*CHANGE
+      	 * added new switch to handle at exit
+      	 */
         case 9: //at beacon && at exit
-          /*if( c!='b' ) return false;
-          full_cmd_str += "beacon ";
-          parse_state = 10;
-          break;*/
-        	/*
-        	 * added new switch to handle at exit
-        	 */
+        	
         	switch(c)
             {
               case 'b':
                 full_cmd_str += "beacon ";
                 parse_state = 10;
                 break;
-              case 'e':
-                full_cmd_str += "exit ";
-                parse_state = 11;
+              case 'e': //case for exits
+                full_cmd_str += "exit ";//update command string
+                parse_state = 11;//go to new parse state
                 break;
               default: return false;
             }
@@ -271,7 +268,11 @@ public class ATCInputhandler_impl extends Object implements ATCInputhandler
           }
           parse_state = 99;
           break;
-        case 11: //at beacon#
+          
+          /*CHANGE
+           * New parse state to handle turning at exits
+           */
+        case 11: //at exit#
             int exit_num;
             try { exit_num = Integer.parseInt( Character.toString(c) ); }
             catch(Exception e) { return false; }
@@ -290,6 +291,7 @@ public class ATCInputhandler_impl extends Object implements ATCInputhandler
             }
             parse_state = 99;
             break;
+            
       } //end switch
     } //end while
 
@@ -315,7 +317,9 @@ public class ATCInputhandler_impl extends Object implements ATCInputhandler
       atc_obj.stopATC();
     }
     
-    /*Added pause functionality*/
+    /*CHANGE
+     * listens for pause button and runs pausing function if clicked
+     */
     else if( "Pause".equals( command ) )
     {
     	atc_obj.pauseATC();

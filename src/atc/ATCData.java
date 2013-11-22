@@ -61,7 +61,9 @@ public class ATCData extends Object
   protected int tick_count = 0;
   protected int safe_plane_count = 0;
   
-  //saving seed
+  /*CHANGE
+   * added localSeed and seed to use for the random number generator
+   */
   protected long localSeed = System.currentTimeMillis();
   protected long seed = 0;
   protected Random rand = new Random();
@@ -183,6 +185,11 @@ public class ATCData extends Object
 
   public synchronized void start()
   {
+	  /*CHANGE
+	   * check to see if the user has added a seed
+	   * if they have use the seed presented, if not
+	   * use new random seed.
+	   */
 	   seed = Long.parseLong(atc_obj.getSeed());
 	   if(seed<=0)
 		   this.seed = this.localSeed;
@@ -224,6 +231,10 @@ public class ATCData extends Object
     }
     
     // Save record
+    /*CHANGE
+     * added seed as one of the records to be saves so the user can
+     * replay an old game
+     */
     if( start_time_ms != 0 )
       if( record != null )
         record.save( user_name, config_name, tick_count, 
@@ -312,8 +323,11 @@ public class ATCData extends Object
   //tick!!
   public void tick() throws ATCGameOverException
   {
-	  //check pause flag during tick
+	/*CHANGE
+	 * Check pause flag to see if game is pause
+	 */
 	if(atc_obj.pauseFlag){return;}
+	
     tick_count++;
 
     int plane_id;

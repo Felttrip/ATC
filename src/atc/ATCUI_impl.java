@@ -23,6 +23,7 @@ import java.lang.String;
 import java.lang.Math;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Set;
 import java.awt.*;
 import java.awt.event.*;
@@ -50,15 +51,16 @@ public class ATCUI_impl
 
   // Size
   protected int grid_size = 30, icon_size = 20;
-  /*
+  /*CHANGE
    * adjusted text gap so that letters are readable on the top row, slight overlap of text and plane icon does not
-   * affect playability, and may help player keep tack of planes easier.
+   * affect playability, and may help player keep tack of planes.
    */
   protected int text_height, text_gap = -9;
   protected int plane_width, plane_height;
   protected int radar_area_width, radar_area_height;
   protected int info_area_width=140;
   protected int dx, dy;
+  
 
     // Position to Coordinate
     protected int convPos( int px ) { return px*grid_size+grid_size/2; }
@@ -122,10 +124,13 @@ public class ATCUI_impl
   JPanel controlArea;
     JButton newButton;
     JButton exitButton;
-    /*
+    /*CHANGE
      * added a pause button using JButton
      */
     JButton pauseButton;
+    /*CHANGE
+     * added a textField for seed input
+     */
     JTextField textField;
   // Planes
   class UIPlane extends Object
@@ -201,8 +206,14 @@ public class ATCUI_impl
 
     // controlArea
     controlArea = new JPanel();
-    textField = new JTextField(20);
+    /*CHANGE
+     * added textFieldof size 13 with default text seed.
+     * also added a ToolTipText for fun
+     */
+    textField = new JTextField(13);
     textField.setText("Seed");
+    textField.setToolTipText("Enter your Seed here");
+    
     newButton = new JButton( "New" );
     newButton.setActionCommand("New");
     newButton.addActionListener( this );
@@ -212,7 +223,7 @@ public class ATCUI_impl
     exitButton.setActionCommand("Exit");
     exitButton.addActionListener( this );
     exitButton.setFocusable( false ); // Don't steal Frame's focus
-    /*
+    /*CHANGE
      * Added needed parts for pause button 
      */
     pauseButton = new JButton( "Pause" );
@@ -223,12 +234,15 @@ public class ATCUI_impl
     controlArea.add( newButton );
     controlArea.add( exitButton );
     
-    /*
+    /*CHANGE
      * Placed pause button in controlArea
      */
     controlArea.add( pauseButton );
     getContentPane().add( controlArea, BorderLayout.NORTH );
-    controlArea.add(  textField );
+    /*CHANGE
+     * added textField to the controlArea
+     */
+    controlArea.add( textField );
     pack();
   }
 
@@ -258,8 +272,7 @@ public class ATCUI_impl
     }
     
     if( so instanceof Airfield )
-    {
-      int xa[] = new int[3], ya[] = new int[3];
+    {  int xa[] = new int[3], ya[] = new int[3];
       int l1=grid_size/2, l2=grid_size/6;
       xa[0] = convPos(so.pos.x);
       ya[0] = convPos(so.pos.y);
@@ -313,7 +326,8 @@ public class ATCUI_impl
 
   ///////////////////
   //
-  /*Added getSeed()
+  /*CHANGE
+   * Added getSeed()
    * check to see if current seed value textField is of type long
    * if it is it will return it as the seed
    * if its not it will return -1
@@ -380,12 +394,11 @@ public class ATCUI_impl
         uiplane.radar_label.setHorizontalTextPosition(JLabel.CENTER);
         uiplane.radar_label.setIconTextGap(text_gap);
         uiplane.radar_label.setForeground(text_color);
-        /*
-         * Set font to monospaced
+        /*CHANGE
+         * Set font to monospaced fixes "l/i" problem
          */
         Font myFont = new Font("Monospaced", Font.PLAIN, 12);
         uiplane.radar_label.setFont(myFont);
-        
         radarArea.add( uiplane.radar_label, new Integer(2) );
     if(ATC.debug_flag) System.out.println( "p.u.4" ); //DEBUG
       }
@@ -427,13 +440,19 @@ public class ATCUI_impl
       rs += (new Character(p.getIdChar())).toString() + p.alt + " ";
       rs += p.destination.getName() + " ";
       
-      //if waiting to take off 
+      /*CHANGE
+       * if plane is waiting to take off
+       * append its airfield location to the string 
+       */
       if(p.waiting_flag)
       {
-    	  String aField = "0";
-    	  int xcord = p.pos.x;
-    	  int ycord = p.pos.y;
-    	  rs += "@A"+aField;    		  
+    	  for(int i=0;i<atc_obj.data.airfield_count;i++)
+    		  if(p.pos.x==atc_obj.data.airfields[i].pos.x&&p.pos.y==atc_obj.data.airfields[i].pos.y)
+    		  {
+    			  rs += "@A"+i;
+    			  break;
+    		  }
+    	  
       }
       
     	  
@@ -496,6 +515,11 @@ public class ATCUI_impl
 
   public void start()
   {
+	/*CHANGE
+	 * make textField unfocusable and return focus to frame.
+	 */
+	textField.setFocusable(false);
+	this.requestFocus();
     newButton.setEnabled( false );
     synchronized(this){
     if( ! keyListenerAdded )

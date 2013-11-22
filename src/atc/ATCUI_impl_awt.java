@@ -478,6 +478,10 @@ public class ATCUI_impl_awt
   public void windowDeiconified(WindowEvent e){}
   public void windowActivated(WindowEvent e){}
   public void windowDeactivated(WindowEvent e){}
+  /*CHANGE
+   * Added to suppress warnings
+   * caution do not use awt mode, it wont work.
+   */
 @Override
 public String getSeed() {
 	// TODO Auto-generated method stub

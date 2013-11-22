@@ -21,6 +21,9 @@ package atc;
 /**
  * Interface for saving game record once a game is over.
  */
+/*CHANGE
+ * added seed to record for playback
+ */
 public interface ATCRecord
 {
   public void save( String user, String config_name, 

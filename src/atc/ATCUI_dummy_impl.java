@@ -99,6 +99,9 @@ public class ATCUI_dummy_impl extends Object implements ATCUI
   public void refresh(){}
   public void close(){}
 @Override
+/*CHANGE
+ * looks like a debug file, had to add function so program would run
+ */
 public String getSeed() {
 	// TODO Auto-generated method stub
 	return null;

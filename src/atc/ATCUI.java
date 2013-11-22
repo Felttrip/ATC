@@ -63,6 +63,9 @@ public interface ATCUI
    */
   public void close();
 
+  /*CHANGE
+   * added getSeed() function
+   */
  public String getSeed();
 };
 

@@ -33,6 +33,9 @@ public class ATCRecord_impl implements ATCRecord
         ", Time: " + time +
         ", Real time: " + (double)real_time/1000 + "s" +
         ", Safe: " + safe_count  +
+        /*CHANGE
+         * Add seed to print statement
+         */
         ", Seed: "+ seed);
   }
 };

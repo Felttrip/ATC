@@ -40,6 +40,9 @@ public class ATC extends Applet
 
   protected String game = null; /* name of the game config */
   protected Reader input_reader = null;
+  /*CHANGE
+   * added pauseFlag and seed variables
+   */
   protected boolean pauseFlag = false;
   protected String seed = null;
 
@@ -125,8 +128,10 @@ public class ATC extends Applet
       System.exit(0);
   }
   
-  /*
-   * Pause function
+  /*CHANGE
+   * added Pause function
+   * function checks to see if pause button was pressed
+   * and changes the flag to the opposite state
    */
   public synchronized void pauseATC()
   {
@@ -136,10 +141,16 @@ public class ATC extends Applet
 	  else
 		  pauseFlag = true;
   }
+  
+  /*CHANGE
+   * Added getSeed()
+   * returns the seed from the textField
+   */
   public synchronized String getSeed()
   {
 	  return ui.getSeed();
   }
+  
   public ATCUI getUI()
   { return ui; }
   public ATCInputhandler getInputhandler()
